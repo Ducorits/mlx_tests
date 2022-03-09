@@ -6,7 +6,7 @@
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/06 15:28:20 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/03/09 14:04:12 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/03/09 14:51:45 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int main(void)
 	int			width;
 	int			height;
 	mlx_image_t	**images;
+	int 	base_color_p1 = 0xFF0000FF;
+	int 	base_color_p2 = 0x640064FF;
 
 	color_count = 16;
 	height = 100;
@@ -55,7 +57,7 @@ int main(void)
 	mlx = mlx_init(800, 600, "cluster", 1);
 	game.colors = malloc(color_count * sizeof(*game.colors));
 	images = malloc(color_count * sizeof(mlx_image_t *));
-	create_chip_colors(&game);
+	create_chip_colors(&game, base_color_p1, base_color_p2);
 	for (int i = 0; i < color_count; i++)
 	{
 		images[i] = malloc(sizeof(mlx_image_t));

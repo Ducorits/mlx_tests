@@ -12,5 +12,5 @@ struct game {
 	int			chip_count;
 };
 
-void create_chip_colors(game_t *game);
+void create_chip_colors(game_t *game, int base_color_p1, int base_color_p2);
 #endif
