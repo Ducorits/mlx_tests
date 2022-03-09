@@ -3,7 +3,7 @@
 #include <math.h>
 #include "../include/mlx_tests.h"
 
-int	rgb_to_int(int r, int g, int b)
+unsigned	rgb_to_int(unsigned r, unsigned g, unsigned b)
 {
 	return (r << 24 | g << 16 | b << 8 | 0xFF);
 }
@@ -60,14 +60,14 @@ void hsv_to_rgb(float *h, float *s, float *v, float *r, float *g, float *b)
 	*b = b1 + m;
 }
 
-void	split_rgb(int base_color, float *r, float *g, float *b)
+void	split_rgb(unsigned base_color, float *r, float *g, float *b)
 {
 	*r = (base_color >> 24 & 0xFF) / 255.0;
 	*g = (base_color >> 16 & 0xFF) / 255.0;
 	*b = (base_color >> 8 & 0xFF) / 255.0;
 }
 
-int	close_color_check(int base_colors_p1, int base_colors_p2)
+unsigned	close_color_check(unsigned base_colors_p1, unsigned base_colors_p2)
 {
 	float	r, g, b;
 	float	r1, g1, b1;
@@ -84,7 +84,7 @@ int	close_color_check(int base_colors_p1, int base_colors_p2)
 	return (1);
 }
 
-int	get_inverted_color(int color)
+unsigned	get_inverted_color(unsigned color)
 {
 	float r, g, b;
 	float h, s, v;
@@ -96,29 +96,33 @@ int	get_inverted_color(int color)
 	return (rgb_to_int(r * 255, g * 255, b * 255));
 }
 
-void create_chip_colors(game_t *game, int base_color_p1, int base_color_p2)
+void shift_colors_left(unsigned *base_color)
 {
-	int		colors = 10;
+	
+}
+
+void create_chip_colors(game_t *game, unsigned base_color_p1, unsigned base_color_p2)
+{
 	float	h_increase;
 	float	r, g, b;
 	float	h, s, v;
 
 	printf("starting colors: P1 %x, P2 %x\n", base_color_p1, base_color_p2);
 	if (close_color_check(base_color_p1, base_color_p2))
-		base_color_p2 = get_inverted_color(base_color_p1);
-	h_increase = 1.0 / (colors * 2);
+		base_color_p2 = get_inverted_color(base_color_p2);
+	h_increase = 1.0 / (game->color_count * 2);
 	split_rgb(base_color_p1, &r, &g, &b);
 	rgb_to_hsv(&r, &g, &b, &h, &s, &v);
-	for (int i = 0; i < colors; i += 1) {
+	for (int i = 0; i < game->color_count; i += 1) {
 		hsv_to_rgb(&h, &s, &v, &r, &g, &b);
-		if (i == colors / 2)
+		if (i == game->color_count / 2)
 			split_rgb(base_color_p2, &r, &g, &b);
 		rgb_to_hsv(&r, &g, &b, &h, &s, &v);
 		game->colors[i] = rgb_to_int(r * 255, g * 255, b * 255);
 		h = fmod(h + h_increase, 1.0);
 	}
 	printf("colors before printing: P1 %x, P2 %x\n", base_color_p1, base_color_p2);
-	for (int i = 0; i < colors; i += 1)
+	for (int i = 0; i < game->color_count; i += 1)
 		printf("color: %d: %x\n", i, game->colors[i]);
 }
 	// printf("new color: 0x%x in decimal: %d\n", new_color, new_color);

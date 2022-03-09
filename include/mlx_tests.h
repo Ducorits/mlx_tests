@@ -9,8 +9,9 @@ typedef struct game game_t;
 
 struct game {
 	int			*colors;
+	int			color_count;
 	int			chip_count;
 };
 
-void create_chip_colors(game_t *game, int base_color_p1, int base_color_p2);
+void create_chip_colors(game_t *game, unsigned base_color_p1, unsigned base_color_p2);
 #endif
