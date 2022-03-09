@@ -6,7 +6,7 @@
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/06 15:28:20 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/03/09 15:44:08 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/03/09 16:02:05 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int main(void)
 	int			width;
 	int			height;
 	mlx_image_t	**images;
-	int 	base_color_p1 = 0xFF0000FF;
-	int 	base_color_p2 = 0x640064FF;
+	int 	base_color_p1 = 0x00FF00FF;
+	int 	base_color_p2 = 0x0000FFFF;
 
 	height = 100;
 	width = 100;
@@ -70,7 +70,7 @@ int main(void)
 		}
 	}
 
-	for (size_t i = 0; i < game.color_count; i++)
+	for (int i = 0; i < game.color_count; i++)
 		mlx_image_to_window(mlx, images[i], i * 40,  1);
 	mlx_loop_hook(mlx, &hook, mlx);
 	mlx_loop(mlx);

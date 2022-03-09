@@ -72,14 +72,14 @@ unsigned	close_color_check(unsigned base_colors_p1, unsigned base_colors_p2)
 	float	r, g, b;
 	float	r1, g1, b1;
 	float	r2, g2, b2;
-	float 	threshold = 0.2;
+	float 	threshold = 1.4;
 	
 	split_rgb(base_colors_p1, &r1, &g1, &b1);
 	split_rgb(base_colors_p2, &r2, &g2, &b2);
-	r = fabs(r1 - r2);
-	g = fabs(g1 - g2);
-	b = fabs(b1 - b2);
-	if (r + g + b > threshold)
+	r = powf(r1 - r2, 2.0);
+	g = powf(g1 - g2, 2.0);
+	b = powf(b1 - b2, 2.0);
+	if (sqrtf(r + g + b) > threshold)
 		return (0);
 	return (1);
 }
@@ -96,11 +96,6 @@ unsigned	get_inverted_color(unsigned color)
 	return (rgb_to_int(r * 255, g * 255, b * 255));
 }
 
-void shift_colors_left(unsigned *base_color)
-{
-	
-}
-
 void create_chip_colors(game_t *game, unsigned base_color_p1, unsigned base_color_p2)
 {
 	float	h_increase;
@@ -113,10 +108,16 @@ void create_chip_colors(game_t *game, unsigned base_color_p1, unsigned base_colo
 	h_increase = 1.0 / (game->color_count * 2);
 	split_rgb(base_color_p1, &r, &g, &b);
 	rgb_to_hsv(&r, &g, &b, &h, &s, &v);
+	h = fmod(h - h_increase * game->color_count / 4 + 1.0, 1.0);
 	for (int i = 0; i < game->color_count; i += 1) {
 		hsv_to_rgb(&h, &s, &v, &r, &g, &b);
 		if (i == game->color_count / 2)
+		{
 			split_rgb(base_color_p2, &r, &g, &b);
+			rgb_to_hsv(&r, &g, &b, &h, &s, &v);
+			h = fmod(h - h_increase * game->color_count / 4 + 1.0, 1.0);
+			hsv_to_rgb(&h, &s, &v, &r, &g, &b);
+		}
 		rgb_to_hsv(&r, &g, &b, &h, &s, &v);
 		game->colors[i] = rgb_to_int(r * 255, g * 255, b * 255);
 		h = fmod(h + h_increase, 1.0);
